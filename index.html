@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOODBOT — Interactive Face Prototype</title>
+<style>
+:root{--bg:#090d16;--panel:#111827;--line:#263247;--text:#f2f6ff;--muted:#9eacc2;--cyan:#68f0e2;--pink:#ff8fcf;--yellow:#ffe08a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3150 0%,var(--bg) 55%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{max-width:1100px;margin:auto;padding:28px 20px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.14em}
+.logo{width:38px;height:38px;border:1px solid #3d6278;border-radius:12px;display:grid;place-items:center;color:var(--cyan);box-shadow:0 0 24px #68f0e21c}
+.pill{border:1px solid #30415a;background:#111b2b;color:#b8c8dc;padding:8px 12px;border-radius:99px;font-size:12px;letter-spacing:.08em}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:center}
+h1{font-size:clamp(2.3rem,5vw,4.4rem);line-height:.98;letter-spacing:-.055em;margin:0 0 18px}
+h1 span{color:var(--cyan)}
+.intro{font-size:1.06rem;line-height:1.7;color:var(--muted);max-width:560px}
+.note{display:inline-flex;align-items:center;gap:8px;border:1px solid #254e55;background:#0d222b;color:#aaf7ed;border-radius:10px;padding:10px 12px;font-size:.86rem;margin-top:10px}
+.device-card{background:linear-gradient(145deg,#131e2e,#0b111d);border:1px solid var(--line);border-radius:28px;padding:18px;box-shadow:0 25px 80px #0006}
+.device-top{display:flex;justify-content:space-between;align-items:center;color:#7f92ad;font-size:11px;letter-spacing:.15em;padding:3px 5px 15px}
+.device{position:relative;border-radius:22px;padding:12px;background:linear-gradient(145deg,#263246,#0c121e);border:1px solid #3b4b62;box-shadow:inset 0 1px 1px #ffffff14}
+.screen{height:320px;position:relative;overflow:hidden;border-radius:15px;background:radial-gradient(ellipse at 50% 50%,#12283b,#060b13 70%);border:1px solid #244151;display:flex;align-items:center;justify-content:center}
+.screen:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 4px,#6ef5e908 5px 6px);pointer-events:none}
+.screen.night{background:radial-gradient(ellipse at 50% 50%,#10182a,#03050a 74%);border-color:#20283a}
+.screen.night .status{color:#46556d}
+.screen.night .face{filter:brightness(.48)}
+.day-note{font-size:.8rem;color:#a8bad0;line-height:1.5;margin-top:12px}
+.face{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:48px;transition:filter .2s}
+.eye{width:54px;height:78px;background:var(--cyan);border-radius:22px;box-shadow:0 0 22px #68f0e266,0 0 55px #68f0e222;position:relative;transition:all .25s}
+.eye:after{content:"";position:absolute;width:10px;height:13px;background:#eaffff;border-radius:50%;top:14px;right:12px;opacity:.9}
+.mouth{position:absolute;bottom:75px;left:50%;transform:translateX(-50%);width:54px;height:9px;border-radius:99px;background:var(--cyan);box-shadow:0 0 20px #68f0e255;transition:all .25s}
+.cheek{position:absolute;top:58%;width:24px;height:10px;background:#ff83c966;border-radius:99px;opacity:0;filter:blur(2px);transition:opacity .2s}
+.cheek.left{left:19%}.cheek.right{right:19%}
+.status{position:absolute;bottom:13px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.2em;color:#68859b}
+.device-bottom{display:flex;align-items:center;justify-content:space-between;padding:15px 4px 3px;color:#8da0b8;font-size:12px}
+.led{display:inline-block;width:7px;height:7px;background:var(--cyan);border-radius:50%;margin-right:7px;box-shadow:0 0 10px var(--cyan)}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px}
+.panel{background:#101827c9;border:1px solid var(--line);border-radius:20px;padding:20px}
+.panel h2{font-size:1rem;margin:0 0 6px}
+.sub{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 16px}
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+button{font:inherit;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.mood{border:1px solid #2b3a50;background:#131f30;color:#d9e5f6;border-radius:12px;padding:12px 8px;font-size:.86rem}
+.mood:hover,.mood.active{border-color:#5ad8d0;background:#123039;transform:translateY(-1px)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.action{border:1px solid #354760;background:#182338;color:#e7f0ff;border-radius:10px;padding:10px 13px;font-size:.86rem}
+.action.primary{background:var(--cyan);border-color:var(--cyan);color:#071216;font-weight:750}
+.action:hover{filter:brightness(1.1)}
+.sliderrow{display:flex;align-items:center;gap:12px;margin:15px 0;color:#c3cee0;font-size:.9rem}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}
+.metric{background:#0c1421;border:1px solid #24344b;border-radius:12px;padding:12px}
+.metric b{display:block;font-size:1.1rem;color:var(--cyan);margin-bottom:4px}
+.metric span{font-size:.72rem;color:#8fa1b8}
+footer{margin-top:25px;color:#788ba5;font-size:.8rem;line-height:1.6;text-align:center}
+@keyframes blink{0%,100%{transform:scaleY(1)}35%,65%{transform:scaleY(.08)}}
+.face.blink .eye{animation:blink .38s cubic-bezier(.4,0,.2,1) both}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.face.idle{animation:float 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 22px #68f0e266,0 0 55px #68f0e222}50%{box-shadow:0 0 32px #68f0e299,0 0 75px #68f0e244}}
+.face.excited .eye{animation:pulse .7s infinite}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.screen{height:280px}.intro{font-size:1rem}header{align-items:flex-start}.pill{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">◉</div><span>MOODBOT</span></div>
+  <div class="pill">INTERACTIVE DIGITAL PROTOTYPE</div>
+</header>
+<section class="hero">
+  <div>
+    <p style="color:var(--cyan);font-size:.78rem;letter-spacing:.2em;font-weight:750">A LITTLE PERSONALITY, DESIGNED BY YOU</p>
+    <h1>A face that<br><span>has feelings.</span></h1>
+    <p class="intro">MOODBOT is a concept for a tiny desktop companion. Explore its expressions, trigger animations and adjust its glow. This browser prototype demonstrates the intended screen experience before the physical electronics are built.</p>
+    <div class="note">✦ Prototype mode · No hardware required</div>
+  </div>
+  <div class="device-card">
+    <div class="device-top"><span>MB / DISPLAY UNIT</span><span>V.01</span></div>
+    <div class="device">
+      <div class="screen" id="screen">
+        <div class="face idle" id="face">
+          <div class="eye" id="eyeL"></div><div class="eye" id="eyeR"></div>
+          <div class="cheek left" id="cheekL"></div><div class="cheek right" id="cheekR"></div>
+          <div class="mouth" id="mouth"></div>
+        </div>
+        <div class="status" id="status">MOOD: CALM</div>
+      </div>
+    </div>
+    <div class="device-bottom"><span><i class="led"></i>DISPLAY ONLINE</span><span id="clock">00:00:00</span></div>
+  </div>
+</section>
+<section class="layout">
+  <div class="panel">
+    <h2>Choose a mood</h2>
+    <p class="sub">Tap an expression to update the face.</p>
+    <div class="moods">
+      <button class="mood active" data-mood="calm">◉ Calm</button>
+      <button class="mood" data-mood="happy">☺ Happy</button>
+      <button class="mood" data-mood="excited">✦ Excited</button>
+      <button class="mood" data-mood="sleepy">☾ Sleepy</button>
+      <button class="mood" data-mood="sad">⌢ Sad</button>
+      <button class="mood" data-mood="surprised">! Surprised</button>
+    </div>
+    <div class="actions">
+      <button class="action primary" id="random">Surprise me ↗</button>
+      <button class="action" id="blink">Blink</button>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Display settings</h2>
+    <p class="sub">Adjust the prototype's visual style.</p>
+    <div class="sliderrow"><label for="glow">Glow</label><input id="glow" type="range" min="20" max="100" value="75"><span id="glowValue">75%</span></div>
+    <div class="sliderrow"><label for="size">Eye size</label><input id="size" type="range" min="70" max="130" value="100"><span id="sizeValue">100%</span></div>
+    <div class="actions">
+      <button class="action" id="ambient">Ambient animation: ON</button>
+      <button class="action primary" id="autoDay">Auto day/night: ON</button>
+      <button class="action" id="reset">Reset</button>
+    </div>
+    <p class="day-note" id="dayNote">Day mode: awake and curious. At night, MOODBOT will automatically get sleepy and dim its screen.</p>
+    <div class="readout">
+      <div class="metric"><b id="moodValue">CALM</b><span>CURRENT MOOD</span></div>
+      <div class="metric"><b>6</b><span>EXPRESSIONS</span></div>
+      <div class="metric"><b>V1.0</b><span>PROTOTYPE</span></div>
+    </div>
+  </div>
+</section>
+<footer>MOODBOT is currently a digital concept prototype. The physical enclosure and electronic display are planned future build stages, subject to component availability and project funding.</footer>
+</div>
+<script>
+const face=document.getElementById('face'), eyeL=document.getElementById('eyeL'), eyeR=document.getElementById('eyeR'), mouth=document.getElementById('mouth');
+const statusEl=document.getElementById('status'), moodValue=document.getElementById('moodValue');
+const cheekL=document.getElementById('cheekL'), cheekR=document.getElementById('cheekR');
+let current='calm', ambient=true, autoDay=true, lastAutoMood='';
+const moods={
+ calm:{label:'CALM',eyeH:78,eyeW:54,eyeRadius:22,eyeY:0,mouthW:54,mouthH:9,mouthRadius:99,mouthY:0,rotate:0,cheek:false,excited:false,color:'#68f0e2'},
+ happy:{label:'HAPPY',eyeH:30,eyeW:55,eyeRadius:'5px 5px 30px 30px',eyeY:9,mouthW:64,mouthH:24,mouthRadius:'0 0 45px 45px',mouthY:0,rotate:0,cheek:true,excited:false,color:'#ff8fcf'},
+ excited:{label:'EXCITED',eyeH:84,eyeW:60,eyeRadius:18,eyeY:-3,mouthW:30,mouthH:30,mouthRadius:'50%',mouthY:0,rotate:0,cheek:true,excited:true,color:'#ffe08a'},
+ sleepy:{label:'SLEEPY',eyeH:13,eyeW:56,eyeRadius:99,eyeY:20,mouthW:28,mouthH:7,mouthRadius:99,mouthY:0,rotate:0,cheek:false,excited:false,color:'#9ab8ff'},
+ sad:{label:'SAD',eyeH:68,eyeW:50,eyeRadius:'22px 22px 12px 12px',eyeY:3,mouthW:46,mouthH:13,mouthRadius:'50% 50% 0 0',mouthY:0,rotate:0,cheek:false,excited:false,color:'#9ab8ff'},
+ surprised:{label:'SURPRISED',eyeH:86,eyeW:62,eyeRadius:'50%',eyeY:-4,mouthW:23,mouthH:34,mouthRadius:'50%',mouthY:0,rotate:0,cheek:false,excited:false,color:'#68f0e2'}
+};
+function setMood(name){
+ current=name; const m=moods[name]; const eyeSize=Number(document.getElementById('size').value)/100;
+ [eyeL,eyeR].forEach(e=>{e.style.height=(m.eyeH*eyeSize)+'px';e.style.width=(m.eyeW*eyeSize)+'px';e.style.borderRadius=m.eyeRadius;e.style.transform=`translateY(${m.eyeY}px)`;e.style.background=m.color;e.style.boxShadow=`0 0 ${Number(document.getElementById('glow').value)*.3}px ${m.color}99, 0 0 ${Number(document.getElementById('glow').value)*.7}px ${m.color}33`;});
+ mouth.style.width=m.mouthW+'px';mouth.style.height=m.mouthH+'px';mouth.style.borderRadius=m.mouthRadius;mouth.style.transform='translateX(-50%)';mouth.style.background=m.color;mouth.style.boxShadow=`0 0 18px ${m.color}66`;
+ cheekL.style.opacity=cheekR.style.opacity=m.cheek?'.8':'0';
+ face.classList.toggle('excited',m.excited); face.classList.toggle('idle',ambient);
+ statusEl.textContent='MOOD: '+m.label; moodValue.textContent=m.label;
+ document.querySelectorAll('.mood').forEach(b=>b.classList.toggle('active',b.dataset.mood===name));
+}
+let blinkTimer=null;
+function doBlink(){if(current==='sleeping'||current==='sleepy'||face.classList.contains('blink'))return;face.classList.add('blink');clearTimeout(blinkTimer);blinkTimer=setTimeout(()=>face.classList.remove('blink'),420)}
+function applyDayCycle(){
+ const h=new Date().getHours();
+ // Local browser time: morning = happy, daytime = calm, evening = sleepy, overnight = asleep.
+ let next, period, night=false;
+ if(h>=6&&h<11){next='happy';period='MORNING';}
+ else if(h>=11&&h<18){next='calm';period='DAYTIME';}
+ else if(h>=18&&h<22){next='sleepy';period='EVENING';}
+ else {next='sleepy';period='SLEEP TIME';night=true;}
+ const screen=document.getElementById('screen');
+ screen.classList.toggle('night',night);
+ document.getElementById('dayNote').textContent = autoDay ? `${period}: ${night?'MOODBOT is asleep and its display is dimmed.':next==='sleepy'?'MOODBOT is winding down for bed.':'MOODBOT is awake and showing its '+next+' face.'}` : 'Auto day/night is off. Choose moods manually.';
+ if(autoDay && next!==lastAutoMood){lastAutoMood=next;setMood(next);}
+ if(autoDay && night){mouth.style.opacity='.25';} else {mouth.style.opacity='1';}
+}
+document.querySelectorAll('.mood').forEach(b=>b.addEventListener('click',()=>setMood(b.dataset.mood)));
+document.getElementById('random').addEventListener('click',()=>{const names=Object.keys(moods).filter(n=>n!==current);setMood(names[Math.floor(Math.random()*names.length)]);doBlink()});
+document.getElementById('blink').addEventListener('click',doBlink);
+document.getElementById('glow').addEventListener('input',e=>{document.getElementById('glowValue').textContent=e.target.value+'%';setMood(current)});
+document.getElementById('size').addEventListener('input',e=>{document.getElementById('sizeValue').textContent=e.target.value+'%';setMood(current)});
+document.getElementById('ambient').addEventListener('click',e=>{ambient=!ambient;face.classList.toggle('idle',ambient);e.target.textContent='Ambient animation: '+(ambient?'ON':'OFF')});
+document.getElementById('autoDay').addEventListener('click',e=>{autoDay=!autoDay;e.target.textContent='Auto day/night: '+(autoDay?'ON':'OFF');if(autoDay){lastAutoMood='';applyDayCycle();}else{document.getElementById('screen').classList.remove('night');document.getElementById('dayNote').textContent='Auto day/night is off. Choose moods manually.';mouth.style.opacity='1';}});
+document.getElementById('reset').addEventListener('click',()=>{document.getElementById('glow').value=75;document.getElementById('size').value=100;document.getElementById('glowValue').textContent='75%';document.getElementById('sizeValue').textContent='100%';ambient=true;autoDay=true;lastAutoMood='';document.getElementById('ambient').textContent='Ambient animation: ON';document.getElementById('autoDay').textContent='Auto day/night: ON';setMood('calm');applyDayCycle()});
+function tick(){const d=new Date();document.getElementById('clock').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');applyDayCycle()}
+tick();setInterval(tick,1000);setMood('calm');applyDayCycle();
+function scheduleBlink(){
+  const delay=6000+Math.random()*5000;
+  setTimeout(()=>{if(ambient && current!=='sleepy' && !document.hidden)doBlink();scheduleBlink();},delay);
+}
+scheduleBlink();
+</script>
+</body>
+</html>
