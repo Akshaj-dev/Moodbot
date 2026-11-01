@@ -1,4 +1,5 @@
-No.,Component,Quantity,Purpose,Supplier
-1,Colour touchscreen display,1,Displays S.A.M.'s animated face expressions and interface,https://www.amazon.co.uk/dp/B0H1G3YBFV
-2,Speakers,1 set,Provides audio output for S.A.M.'s voice,https://www.amazon.co.uk/dp/B09ZL4YCZ8
-3,3D printer filament,1 spool,Used to manufacture the custom MOODBOT enclosure,https://www.amazon.co.uk/dp/B0BHQR69RW
+Item,Qty,Supplier,Cost/item,Total Cost,link
+Colour touchscreen display,1,https://www.amazon.co.uk/dp/B0H1G3YBFV,$0.00,$0.00,
+Speakers,1,https://www.amazon.co.uk/dp/B09ZL4YCZ8,$0.00,$0.00,
+3D printer filament,1,https://www.amazon.co.uk/dp/B0BHQR69RW,$0.00,$0.00,
+Estimated total shipping,1,,,$0.00,
