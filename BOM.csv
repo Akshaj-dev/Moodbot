@@ -1,9 +1,3 @@
-# MOODBOT - Bill of Materials (BOM)
-
-## Project Overview
-
-MOODBOT is a desktop AI companion featuring S.A.M. (Synthetic Autonomous Machine). The device is planned to include a colour display, voice interaction, audio output and a custom 3D-printed enclosure.
-
 ## Bill of Materials
 
 | No. | Component | Quantity | Purpose | Supplier |
@@ -11,39 +5,3 @@ MOODBOT is a desktop AI companion featuring S.A.M. (Synthetic Autonomous Machine
 | 1 | Colour touchscreen display | 1 | Displays S.A.M.'s animated face, expressions and interface | [Amazon UK](https://www.amazon.co.uk/dp/B0H1G3YBFV) |
 | 2 | Speakers | 1 set | Provides audio output for S.A.M.'s voice | [Amazon UK](https://www.amazon.co.uk/dp/B09ZL4YCZ8) |
 | 3 | 3D printer filament | 1 spool | Used to manufacture the custom MOODBOT enclosure | [Amazon UK](https://www.amazon.co.uk/dp/B0BHQR69RW) |
-
-## Component Functions
-
-### 1. Colour Display
-
-The display will act as the main visual interface for MOODBOT. It is intended to show S.A.M.'s animated expressions, status, responses and other visual information.
-
-### 2. Speakers
-
-The speakers will provide audio output, allowing S.A.M. to communicate through spoken responses. Their impedance and power rating must be checked against the display/controller audio output before assembly.
-
-### 3. 3D Printing Filament
-
-The filament will be used to manufacture a custom enclosure. The enclosure will hold and protect the electronic components while providing a compact desktop design.
-
-## Additional Components to Confirm
-
-The following components may also be required, depending on the specifications and accessories supplied with the display:
-
-- ESP32-S3 microcontroller, if not integrated into the display board.
-- Microphone, if not integrated into the display board.
-- Audio amplifier, if not integrated or supplied.
-- USB data and power cable, if not supplied.
-- Connectors, mounting hardware and internal wiring.
-
-## Planned System Architecture
-
-The planned system will use a microcontroller to control the display and audio hardware. A connected computer will run Ollama and handle AI processing. The device will communicate with the computer over a local connection.
-
-## Project Status
-
-The hardware is currently in development. Component compatibility, wiring, firmware and enclosure dimensions must be verified before final assembly. The components listed above are the currently selected parts, not confirmation that the complete device has been assembled or tested.
-
-## Budget
-
-Prices will be added after confirming the current Amazon listing prices, quantities and any additional components required.
