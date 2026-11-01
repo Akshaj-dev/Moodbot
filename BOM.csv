@@ -1,2 +1,45 @@
-Item,Qty,Supplier,Cost/item,Total Cost,link
-Estimated total shipping,1,,,$0.00,
+
+# MOODBOT - Bill of Materials (BOM)
+
+## Project Overview
+MOODBOT is a desktop AI companion featuring S.A.M. (Synthetic Autonomous Machine). The device is designed with a colour display, voice interaction, audio output and a custom 3D-printed enclosure.
+
+## Bill of Materials
+
+| No. | Component | Quantity | Purpose | Supplier |
+|---|---|---:|---|---|
+| 1 | Colour touchscreen display | 1 | Displays S.A.M.'s animated face, expressions and interface | [Amazon UK](https://www.amazon.co.uk/dp/B0H1G3YBFV) |
+| 2 | Speakers | 1 set | Provides spoken audio output for S.A.M. | [Amazon UK](https://www.amazon.co.uk/dp/B09ZL4YCZ8) |
+| 3 | 3D printer filament | 1 spool | Used to manufacture the custom MOODBOT enclosure | [Amazon UK](https://www.amazon.co.uk/dp/B0BHQR69RW) |
+
+## Component Functions
+
+### 1. Colour Display
+The display acts as the main visual interface for MOODBOT. It will show S.A.M.'s animated expressions, status, responses and other visual information.
+
+### 2. Speakers
+The speakers provide audio output, allowing S.A.M. to communicate through spoken responses.
+
+### 3. 3D Printing Filament
+The filament will be used to manufacture a custom enclosure. The enclosure will hold and protect the electronic components while providing a compact desktop design.
+
+## Additional Components
+
+The following components must be confirmed against the display and speaker specifications before purchase:
+
+- ESP32-S3 microcontroller, if not integrated into the display.
+- Microphone, if not integrated into the display.
+- Audio amplifier, if not included or integrated.
+- USB data and power cable, if not supplied.
+
+## System Architecture
+
+The planned system will use a microcontroller to control the display and audio hardware. A connected computer will run Ollama and handle AI processing. The device will communicate with the computer over a local connection.
+
+## Project Status
+
+The hardware is being developed. Component compatibility, wiring, firmware and enclosure dimensions must be verified before final assembly.
+
+## Budget
+
+Prices will be added after confirming the exact Amazon listing prices and quantities.
